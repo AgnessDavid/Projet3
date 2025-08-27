@@ -18,6 +18,8 @@ class PhotosTable
             ->columns([
                 TextColumn::make('title')
                     ->searchable(),
+                TextColumn::make('prix')
+                    ->searchable(),
                 ImageColumn::make('image_path'),
                 TextColumn::make('created_at')
                     ->dateTime()

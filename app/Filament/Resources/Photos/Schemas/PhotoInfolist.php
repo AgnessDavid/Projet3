@@ -13,6 +13,7 @@ class PhotoInfolist
         return $schema
             ->components([
                 TextEntry::make('title'),
+                TextEntry::make('prix'),
                 ImageEntry::make('image_path'),
                 TextEntry::make('created_at')
                     ->dateTime(),

@@ -15,6 +15,8 @@ class PhotoForm
             ->components([
                 TextInput::make('title')
                     ->required(),
+                TextInput::make('prix')
+                    ->required(),
                 Textarea::make('description')
                     ->columnSpanFull(),
                 FileUpload::make('image_path')

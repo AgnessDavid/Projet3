@@ -51,6 +51,7 @@ class PhotoResource extends Resource
             ->columns([
                 TextColumn::make('title')->label('Titre'),
                 TextColumn::make('prix')->label('Prix'),
+                TextColumn::make('description')->label('Description'),
                 ImageColumn::make('image_path')->label('Image'),
             ])
             ->actions([
