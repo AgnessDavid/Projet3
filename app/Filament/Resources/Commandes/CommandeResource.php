@@ -16,6 +16,7 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
+use App\Models\Photo;
 
 class CommandeResource extends Resource
 {
@@ -28,26 +29,39 @@ class CommandeResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-         ->schema([
-            Select::make('photo_id')
-                ->label('Photo')
-                ->options(\App\Models\Photo::all()->pluck('title', 'id'))
-                ->reactive()
-                ->required(),
+            ->schema([
+                Select::make('photo_id')
+                    ->label('Photo')
+                    ->options(Photo::all()->pluck('title', 'id'))
+                    ->reactive()
+                    ->required()
+                    ->afterStateUpdated(function ($state, callable $set) {
+                        // Récupère le prix de la photo sélectionnée
+                        $photo = Photo::find($state);
+                        $set('prix_total', $photo ? $photo->prix : 0);
+                    }),
 
-            TextInput::make('quantite')
-                ->label('Quantité')
-                ->numeric()
-                ->default(1)
-                ->reactive()
-                ->required(),
+                TextInput::make('quantite')
+                    ->label('Quantité')
+                    ->numeric()
+                    ->default(1)
+                    ->reactive()
+                    ->required()
+                    ->afterStateUpdated(function ($state, callable $set, $get) {
+                        // Recalcule le prix total quand la quantité change
+                        $photoId = $get('photo_id');
+                        $photo = Photo::find($photoId);
+                        if ($photo) {
+                            $set('prix_total', $state * $photo->prix);
+                        }
+                    }),
 
-            TextInput::make('prix_total')
-                ->label('Prix total')
-                ->disabled()
-                ->default(0)
-                ->dehydrated(false), // ne pas sauvegarder directement
-        ]);
+                TextInput::make('prix_total')
+                    ->label('Prix total')
+                    ->disabled()
+                    ->dehydrated() // doit être sauvegardé dans la base
+                    ->default(0),
+            ]);
     }
 
     public static function table(Table $table): Table
