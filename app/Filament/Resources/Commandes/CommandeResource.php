@@ -17,6 +17,14 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use App\Models\Photo;
+use App\Models\Client;
+use Filament\Tables\Actions\ViewAction;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ImageColumn;
+
+
+
+
 
 class CommandeResource extends Resource
 {
@@ -61,6 +69,25 @@ class CommandeResource extends Resource
                     ->disabled()
                     ->dehydrated() // doit être sauvegardé dans la base
                     ->default(0),
+
+
+
+                Select::make('client_id')
+                    ->label('Client')
+                    ->options(Client::all()->pluck('nom', 'id'))
+                    ->required(),
+
+                Select::make('moyen_paiement')
+                    ->label('Moyen de paiement')
+                    ->options([
+                        'Carte bancaire' => 'Carte bancaire',
+                        'Mobile Money' => 'Mobile Money',
+                        'Paypal' => 'Paypal',
+                    ])
+                    ->required(),
+
+
+
             ]);
     }
 
