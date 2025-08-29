@@ -15,6 +15,12 @@ class PaiementsTable
     {
         return $table
             ->columns([
+                TextColumn::make('client.nom')
+                    ->numeric()
+                    ->sortable(),
+                TextColumn::make('client_id')
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make('commande_id')
                     ->numeric()
                     ->sortable(),

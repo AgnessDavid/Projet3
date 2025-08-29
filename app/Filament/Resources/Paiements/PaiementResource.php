@@ -56,6 +56,7 @@ class PaiementResource extends Resource
             'create' => CreatePaiement::route('/create'),
             'view' => ViewPaiement::route('/{record}'),
             'edit' => EditPaiement::route('/{record}/edit'),
+           
         ];
     }
 }
