@@ -9,11 +9,12 @@ return new class extends Migration {
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('commande_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('client_id')->constrained()->cascadeOnDelete();
+          
             $table->decimal('montant', 10, 2);
             $table->string('moyen_paiement');
-           
+            $table->enum('statut', ['payé'])->default('payé');
+            $table->timestamps();
+
             $table->timestamps();
         });
     }

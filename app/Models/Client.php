@@ -31,4 +31,20 @@ class Client extends Model
     {
         return $this->hasMany(Commande::class);
     }
+
+
+
+    // Relation avec les rapports financiers via les commandes
+    public function rapportFinanciers()
+    {
+        return $this->hasManyThrough(
+            RapportFinancier::class, // Modèle final
+            Commande::class,         // Modèle intermédiaire
+            'client_id',             // Foreign key sur commandes
+            'commande_id',           // Foreign key sur rapport_financiers
+            'id',                    // Local key sur clients
+            'id'                     // Local key sur commandes
+        );
+    }
+
 }

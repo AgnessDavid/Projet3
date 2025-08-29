@@ -1,6 +1,9 @@
 <?php
 
+
+
 namespace App\Filament\Resources\Paiements;
+use App\Filament\Widgets\RapportFinancier;
 
 use App\Filament\Resources\Paiements\Pages\CreatePaiement;
 use App\Filament\Resources\Paiements\Pages\EditPaiement;

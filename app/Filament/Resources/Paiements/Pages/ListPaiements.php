@@ -5,6 +5,9 @@ namespace App\Filament\Resources\Paiements\Pages;
 use App\Filament\Resources\Paiements\PaiementResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
+/*
+use App\Filament\Widgets\RapportFinancier;
+*/
 
 class ListPaiements extends ListRecords
 {
@@ -16,4 +19,22 @@ class ListPaiements extends ListRecords
             CreateAction::make(),
         ];
     }
+
+ /*
+   protected function getHeaderWidgets(): array 
+      {
+
+
+return[ RapportFinancier::class,
+
+
+
+];
+
+   }
+
+*/
 }
+
+
+
