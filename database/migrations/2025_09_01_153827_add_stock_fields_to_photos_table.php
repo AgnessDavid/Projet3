@@ -6,27 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->decimal('prix', 10, 2)->default(0); // prix
-            $table->integer('width')->nullable();       // largeur en pixels
-            $table->integer('height')->nullable();
-
-
+            $table->integer('quantite_en_stock')->default(0);
+            $table->integer('seuil_de_securite')->default(0);
+            $table->integer('quantite_reapprovisionnement')->default(0);
+           
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('photos', function (Blueprint $table) {
-            $table->dropColumn(['prix', 'width', 'height']);
+            $table->dropColumn(['quantite_en_stock', 'seuil_de_securite', 'quantite_reapprovisionnement']);
         });
     }
+
 };
