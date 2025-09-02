@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Paiement;
 use App\Models\RapportFinancier;
+use App\Models\Stock;
+use Filament\Notifications\Notification;
 
 class Commande extends Model
 {
@@ -19,6 +21,7 @@ class Commande extends Model
         'moyen_paiement',
     ];
 
+    // Relations
     public function client()
     {
         return $this->belongsTo(Client::class);
@@ -39,12 +42,12 @@ class Commande extends Model
         return $this->hasOne(RapportFinancier::class);
     }
 
-    // 🔹 Création auto du paiement & rapport financier
+    // 🔹 Hook pour gérer paiements, rapports et stock après création
     protected static function booted()
     {
         static::created(function ($commande) {
 
-            // Paiement auto
+            // 1️⃣ Création automatique du paiement
             Paiement::create([
                 'commande_id' => $commande->id,
                 'client_id' => $commande->client_id,
@@ -53,24 +56,39 @@ class Commande extends Model
                 'statut' => 'payé',
             ]);
 
-            // Rapport financier auto
+            // 2️⃣ Création automatique du rapport financier
             RapportFinancier::create([
                 'commande_id' => $commande->id,
                 'titre' => "Commande n°{$commande->id} de {$commande->client->nom} {$commande->client->prenom}",
                 'type' => 'revenu',
                 'montant' => $commande->prix_total,
                 'date' => $commande->created_at,
-
-                // Infos client
                 'nom' => $commande->client->nom,
                 'prenom' => $commande->client->prenom,
                 'adresse' => $commande->client->adresse,
-
-                // Infos produit
                 'photo_article' => optional($commande->photo)->image_path,
                 'quantite' => $commande->quantite,
                 'prix_achat' => optional($commande->photo)->prix,
             ]);
+
+            // 3️⃣ Décrémentation du stock
+            $stock = Stock::where('photo_id', $commande->photo_id)->first();
+            if ($stock) {
+                $result = $stock->diminuerStock($commande->quantite);
+
+                if (!$result['success']) {
+                    throw new \Exception($result['message']);
+                }
+
+                // 🔔 Notification si seuil de sécurité atteint
+                if ($result['alerte_securite']) {
+                    Notification::make()
+                        ->title('Alerte Stock')
+                        ->body($result['message'])
+                        ->warning()
+                        ->send();
+                }
+            }
         });
     }
 }

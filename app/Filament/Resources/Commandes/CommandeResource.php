@@ -109,6 +109,9 @@ class CommandeResource extends Resource
             'index' => ListCommandes::route('/'),
             'create' => CreateCommande::route('/create'),
             'edit' => EditCommande::route('/{record}/edit'),
+            
         ];
     }
+
+    
 }

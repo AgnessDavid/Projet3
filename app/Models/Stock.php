@@ -43,5 +43,61 @@ class Stock extends Model
                 $photo->save();
             }
         });
+
+        
     }
+
+
+    public function diminuerStock(int $quantite)
+    {
+        // Vérifier si la quantité commandée est supérieure au stock
+        if ($quantite > $this->quantite_en_stock) {
+            return [
+                'success' => false,
+                'message' => "Quantité commandée ({$quantite}) supérieure au stock disponible ({$this->quantite_en_stock})."
+            ];
+        }
+
+        // Décrémenter la quantité
+        $this->quantite_en_stock -= $quantite;
+
+        // Vérifier le seuil de sécurité
+        $alerte_securite = false;
+        if ($this->quantite_en_stock < $this->seuil_de_securite) {
+            $alerte_securite = true;
+        }
+
+        $this->save();
+
+        return [
+            'success' => true,
+            'alerte_securite' => $alerte_securite,
+            'message' => $alerte_securite
+                ? "Attention : le stock est inférieur au seuil de sécurité !"
+                : "Stock mis à jour avec succès."
+        ];
+    }
+
+    public function reapprovisionner(int $quantite)
+    {
+        $this->quantite_en_stock += $quantite;
+
+        // Vérifier si le stock atteint ou dépasse le seuil de sécurité
+        $alerte_securite = false;
+        if ($this->quantite_en_stock >= $this->seuil_de_securite) {
+            $alerte_securite = true;
+        }
+
+        $this->save();
+
+        return [
+            'success' => true,
+            'alerte_securite' => $alerte_securite,
+            'message' => $alerte_securite
+                ? "Le stock est maintenant suffisant (≥ seuil de sécurité)."
+                : "Réapprovisionnement effectué avec succès."
+        ];
+    }
+
+
 }
