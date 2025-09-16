@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Stock;
+use Filament\Notifications\Notification;
 
 class Photo extends Model
 {
@@ -14,14 +17,16 @@ class Photo extends Model
         'width',
         'height',
         'quantite_en_stock',
-        'seuil_de_securite',
         'quantite_reapprovisionnement',
-        
+        'seuil_de_securite',
     ];
 
-    // Relation inverse vers le stock
-    public function stock()
+    // Historique des mouvements
+    public function stock(): HasMany
     {
-        return $this->hasOne(Stock::class, 'photo_id');
+        return $this->hasMany(Stock::class, 'photo_id');
     }
+
+   
+ 
 }

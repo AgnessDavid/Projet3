@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\Stocks\Pages;
+namespace App\Filament\Resources\FicheBesoins\Pages;
 
-use App\Filament\Resources\Stocks\StockResource;
+use App\Filament\Resources\FicheBesoins\FicheBesoinResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditStock extends EditRecord
+class EditFicheBesoin extends EditRecord
 {
-    protected static string $resource = StockResource::class;
+    protected static string $resource = FicheBesoinResource::class;
 
     protected function getHeaderActions(): array
     {

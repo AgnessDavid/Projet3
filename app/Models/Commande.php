@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use App\Models\Paiement;
 use App\Models\RapportFinancier;
+use App\Models\Photo;
 use App\Models\Stock;
 use Filament\Notifications\Notification;
 
@@ -42,7 +44,9 @@ class Commande extends Model
         return $this->hasOne(RapportFinancier::class);
     }
 
-    // 🔹 Hook pour gérer paiements, rapports et stock après création
+    /**
+     * Hook pour gérer paiements, rapports et stock après création
+     */
     protected static function booted()
     {
         static::created(function ($commande) {
@@ -71,24 +75,8 @@ class Commande extends Model
                 'prix_achat' => optional($commande->photo)->prix,
             ]);
 
-            // 3️⃣ Décrémentation du stock
-            $stock = Stock::where('photo_id', $commande->photo_id)->first();
-            if ($stock) {
-                $result = $stock->diminuerStock($commande->quantite);
+          
 
-                if (!$result['success']) {
-                    throw new \Exception($result['message']);
-                }
-
-                // 🔔 Notification si seuil de sécurité atteint
-                if ($result['alerte_securite']) {
-                    Notification::make()
-                        ->title('Alerte Stock')
-                        ->body($result['message'])
-                        ->warning()
-                        ->send();
-                }
-            }
         });
     }
 }

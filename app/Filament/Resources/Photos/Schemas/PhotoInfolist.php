@@ -19,7 +19,8 @@ class PhotoInfolist
                 TextEntry::make('width'),
                 TextEntry::make('height'),
                 TextEntry::make('quantite_en_stock'),
-               
+                TextEntry::make('quantite_reapprovisionnement'),
+                TextEntry::make('seuil_de_securite'),
                 ImageEntry::make('image_path'),
                 TextEntry::make('created_at')->dateTime(),
                 TextEntry::make('updated_at')->dateTime(),

@@ -32,7 +32,13 @@ class PhotoForm
                 TextInput::make('quantite_en_stock')
                     ->numeric()
                     ->minValue(0),
-               
+                TextInput::make('quantite_reapprovisionnement')
+                    ->numeric()
+                    ->minValue(0),
+                TextInput::make('seuil_de_securite')
+                    ->numeric()
+                    ->minValue(0),
+
                 FileUpload::make('image_path')
                     ->image()
                     ->required(),
